@@ -1,7 +1,7 @@
 type User {
   id: ID! 
   avatar: String
-  userName: String! 
+  username: String! 
   email: String! 
   firstName: String
   lastName: String
@@ -14,12 +14,13 @@ type User {
   followers: [User!]! 
   followersCount: Int!
   posts: [Post!]!
+  postsCount: Int!
   likes: [Like!]!
   comments: [Comment!]!
   rooms: [Room!]!
-  loginSecret: String
-  createAt: String!
-  updateAt: String!
+  loginSecret: String!
+  createAt: String
+  updateAt: String
 }
 
 type Post {
@@ -32,6 +33,7 @@ type Post {
   comments: [Comment!]!
   isLiked: Boolean!
   likeCount: Int!
+  commentCount: Int!
   createAt: String!
   updateAt: String!
 }
@@ -65,7 +67,7 @@ type File {
 type Room {
   id: ID! 
   participants: [User!]!
-  Messages: [Message!]!
+  messages: [Message!]!
   createAt: String!
   updateAt: String!
 }
