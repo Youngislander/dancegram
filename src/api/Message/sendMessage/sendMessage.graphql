@@ -1,4 +1,4 @@
 type Mutation {
-    sendMessage(roomId: String message: String! to: String): Message
+    sendMessage(roomId: String, message: String!, to: String): Message
 }
 
