@@ -7,7 +7,7 @@ export default {
     Mutation:{
         editPost: async(_, args, { request, isAuthenticated }) => {
             isAuthenticated(request);
-            const{ id, caption, location, action } = args;
+            const{ id, caption="", location="", action } = args;
             const{ user } = request;
             const post = await prisma.$exists.post({id, user: {id: user.id}});
             if(post){

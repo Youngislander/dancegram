@@ -20,14 +20,14 @@ const upload = multer({
             cb(null, Date.now().toString());
         }
     })
-});
+})
 
-export const uploadMiddleware = upload.single("file");
+export const uploadMiddleware = upload.any();
 
 export const uploadController = (req, res) => {
-    const{
-        file: { location }
+    const {
+        files
     } = req;
-    res.json({ location });
-
+    res.json({ files });
+  console.log(req.files);
 };

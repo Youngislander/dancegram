@@ -2,17 +2,23 @@ import { prisma } from "../../../../generated/prisma-client";
 
 export default {
     Query:{
-        seeRooms: (_, __, {request, isAuthenticated}) => {
-            isAuthenticated(request);
+        seeRooms: async(_, args, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const { toId } = args;
             const { user } = request;
-            return prisma
-              .rooms({
-                where: {
-                participants_some: {
-                    id: user.id
-                }
-            }
-          })
+            console.log(user.username);
+            console.log(toId);
+
+           return prisma
+            .rooms({
+              where: {
+                 AND:[
+                      {participants_some: {id:toId}},
+                      {participants_some: {id:user.id}}
+                ]
+          }
+        })
+  
         }
     }
 }

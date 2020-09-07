@@ -1,4 +1,4 @@
 type Query {
-    seeRooms: [Room!]!
+    seeRooms(toId: String): [Room!]!
 }
 

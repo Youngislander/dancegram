@@ -1,14 +1,17 @@
 import { prisma } from "../../../../generated/prisma-client";
+import newMessage, {channel} from "../newMessage/newMessage";
 
 
 export default {
     Mutation: {
-        sendMessage: async(_, args, {request, isAuthenticated}) => {
+        sendMessage: async(_, args, {request, isAuthenticated, pubsub}) => {
             isAuthenticated(request);
             const { user } = request;
-            const { roomId, message, toId } = args;
+            const { roomId="", message="hi error", toId } = args;
+            console.log(user.id);
+            console.log(toId);
             let room
-            if(roomId === undefined){
+            if(roomId === ""){
               if(user.id !== toId){
                 room = await prisma
                 .createRoom({
@@ -24,17 +27,16 @@ export default {
             if (!room) {
                 throw Error("Room not found");
             }
-            const getTo = room.participants.filter(
-                participant => participant.id !== user.id
-            )[0];
-            return prisma.createMessage({
+            
+            
+            const createMessage = await prisma.createMessage({
                 text: message,
                 from: {
                     connect: {id: user.id}
                 },
                 to: {
                     connect: {
-                        id: roomId ? getTo.id : toId
+                        id: toId
                     }
                 },
                 room: {
@@ -43,7 +45,14 @@ export default {
                     }
                 }
 
-            });
+            }); 
+            
+            pubsub.publish(channel, {
+                newMessage: createMessage,
+                roomId: room.id
+            })
+
+            return createMessage
         }
     }
 }
